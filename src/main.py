@@ -17,10 +17,17 @@ def sieve(n):
     p.append(n)
     return p
 
-def main(n, l = None, u = None):
+def main(n,l = None,u = None):
+    
+    if not l:
+        l = 0
+        u = n
+    elif l and not u:   u = l
+
     primes = sieve(n)
     frontier =  [[i] for i in primes]
     solutions = []
+    start = time.time()
 
     while len(frontier):
         curr = frontier.pop(0)
@@ -29,19 +36,27 @@ def main(n, l = None, u = None):
                 cp = list(curr[:])
                 cp.append(i)
                 cp = tuple(sorted(cp))
-                if sum(cp) == n and cp not in solutions:
+                if sum(cp) == n and cp not in solutions and (len(cp) >= l and len(cp) <= u):
                     solutions.append(cp)
-                elif cp not in frontier:
+                elif cp not in frontier and len(cp) < u:
                     frontier.append(cp)
-        
-    print(solutions)
+        elif curr[0] == n and len(curr) == 1 and 1 >= l and 1 <= u:
+            solutions.append(n)
+    return len(solutions)
 
 if __name__ == "__main__":
     try:
         input_file = sys.argv[1]
         try:
-            with open(input_file,"r") as input_file:
-                print(input_file.readline())
+            with open(input_file,"r",encoding="utf-8") as input_file:
+                with open("output.txt","w") as output_file:
+                    for line in input_file.readlines():
+                        line = line.replace("\n","")
+                        vals = [int(i) for i in line.split(" ")]
+                        if len(vals) == 1:  sums = main(vals[0])
+                        elif len(vals) == 2:    sums = main(vals[0],vals[1])
+                        elif len(vals) == 3:    sums = main(vals[0],vals[1],vals[2])
+                        output_file.write(str(sums) + "\n")
         except FileNotFoundError:
             print("Error: File {} cannot be found.".format(input_file))
     except IndexError:
