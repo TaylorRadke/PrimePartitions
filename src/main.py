@@ -17,7 +17,7 @@ def sieve(n):
     p.append(n)
     return p
 
-def main(n,l = None,u = None):
+def search(n,l = None,u = None):
     
     if not l:
         l = 0
@@ -42,6 +42,7 @@ def main(n,l = None,u = None):
                     frontier.append(cp)
         elif curr[0] == n and len(curr) == 1 and 1 >= l and 1 <= u:
             solutions.append(n)
+    finish = time.time() - start
     return len(solutions)
 
 if __name__ == "__main__":
@@ -53,9 +54,12 @@ if __name__ == "__main__":
                     for line in input_file.readlines():
                         line = line.replace("\n","")
                         vals = [int(i) for i in line.split(" ")]
-                        if len(vals) == 1:  sums = main(vals[0])
-                        elif len(vals) == 2:    sums = main(vals[0],vals[1])
-                        elif len(vals) == 3:    sums = main(vals[0],vals[1],vals[2])
+                        if len(vals) == 1:  sums = search(vals[0])
+                        elif len(vals) == 2:    sums = search(vals[0],vals[1])
+                        elif len(vals) == 3:    sums = search(vals[0],vals[1],vals[2])
+                        else:
+                            print("Error: Too many positional arguments for line:\n{}".format(line))
+                            exit()
                         output_file.write(str(sums) + "\n")
         except FileNotFoundError:
             print("Error: File {} cannot be found.".format(input_file))
