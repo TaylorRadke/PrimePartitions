@@ -41,7 +41,7 @@ def init_search(n, lower_bound = None, upper_bound = None):
     solutions = 0
     for i in range(lower_bound,upper_bound + 1):
         solutions += search(i,n,primes)
-    print(time.time() - start)
+    print(f"solved in {time.time() - start} seconds, found {solutions} solutions")
     return solutions
 
 if __name__ == "__main__":
@@ -50,8 +50,9 @@ if __name__ == "__main__":
         try:
             solve_q = []
             with open(infile) as input:
-                for line in input.readlines()[:3]:
+                for line in input.readlines():
                     line = line.replace("\n","")
+                    print(line, end=" ")
                     vals = [int(val) for val in line.split(" ")]
                     if len(vals) == 1:
                         solutions = init_search(vals[0])
@@ -62,10 +63,13 @@ if __name__ == "__main__":
                     else:
                         exit(f"Error: line has too many values\n{line}")
                     solve_q.append(solutions)
-            # with open("output.txt","w") as output:
-            #     for solution in solve_q:
-            #         output.write(solution)
-        except FileNotFoundError:
-            exit(f"Error: {infile} cannot be found")
+            try:
+                with open("output.txt","w") as output:
+                    for solution in solve_q:
+                        output.write(str(solution) + '\n')
+            except Exception as e:
+                print(e)
+        except FileNotFoundError as e:
+            exit(e)
     except:
         exit(f"Usage: python {argv[0]} <input file>")
