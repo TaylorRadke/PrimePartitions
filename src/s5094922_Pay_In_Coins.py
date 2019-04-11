@@ -16,7 +16,6 @@ def sieve(n):
     p.append(1)
     return p
 
-
 def search(slots, total,primes):
     if (slots == 0 and total == 0) or (slots == total):
         return 1
@@ -25,21 +24,18 @@ def search(slots, total,primes):
 
     solutions = 0
     for i in range(len(primes)):
-        solutions += search(slots-1, total-primes[i], primes[i:])
+        solutions += search(slots - 1, total - primes[i], primes[i:])
     return solutions
 
 def init_search(n, lower_bound = None, upper_bound = None):
 
-    if not upper_bound:
-        upper_bound = n
+    if not upper_bound: upper_bound = n
+    if not lower_bound: lower_bound = 1
 
-    if not lower_bound:
-        lower_bound = 1
-
-    primes = sieve(n)
     start = time.time()
+    primes = sieve(n)
     solutions = 0
-    for i in range(lower_bound,upper_bound + 1):
+    for i in range(lower_bound, upper_bound + 1):
         solutions += search(i,n,primes)
     print(f"solved in {time.time() - start} seconds, found {solutions} solutions")
     return solutions
@@ -72,4 +68,4 @@ if __name__ == "__main__":
         except FileNotFoundError as e:
             exit(e)
     except:
-        exit(f"Usage: python {argv[0]} <input file>")
+        print(f"Usage: python {argv[0]} <input file>")
